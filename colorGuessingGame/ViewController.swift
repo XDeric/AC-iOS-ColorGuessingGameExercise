@@ -2,63 +2,105 @@
 //  ViewController.swift
 //  colorGuessingGame
 //
-//  Created by C4Q  on 10/16/17.
-//  Copyright © 2017 C4Q . All rights reserved.
+//  Created by EricM on 7/30/19.
+//  Copyright © 2019 EricM. All rights reserved.
 //
 
 import UIKit
 
 class ViewController: UIViewController {
+    @IBOutlet weak var score: UILabel!
+    @IBOutlet weak var highestScore: UILabel!
     
+    @IBOutlet weak var color: UIView!
     
-    @IBOutlet weak var newGameLabel: UIButton!
-    @IBOutlet weak var gameOverLabel: UILabel!
-    @IBOutlet weak var currentScoreLabel: UILabel!
-    @IBOutlet weak var colorView: UIView!
-    @IBOutlet weak var highScoreLabel: UILabel!
+    @IBOutlet weak var r: UIButton!
+    @IBOutlet weak var b: UIButton!
+    @IBOutlet weak var g: UIButton!
+    @IBOutlet weak var reset: UIButton!
     
-    @IBOutlet weak var redButton: UIButton!
-    @IBOutlet weak var greenButton: UIButton!
-    @IBOutlet weak var blueButton: UIButton!
+    @IBOutlet weak var lose: UILabel!
+    @IBOutlet weak var new: UIButton!
     
+    var red = 0
+    var green = 0
+    var blue = 0
+    var alpha = 0
+    
+    func mixColor()-> UIColor{
+        let red = CGFloat.random(in: 0...1)
+        let green = CGFloat.random(in: 0...1)
+        let blue = CGFloat.random(in: 0...1)
+        let alpha = CGFloat.random(in: 0...1)
+        let myColor = UIColor(red: red, green: green, blue: blue, alpha: alpha)
+        
+        return myColor
+    }
+    
+    //var counter = Counter()
+    func increaseCount(){
+        counter.increseCount()
+    }
+    @IBAction func redColor(_ sender: UIButton) {
+        if red >= green && red >= blue{
+            increaseCount()
+            self.color.backgroundColor = mixColor()
+        }
+        else{
+            hidden(false)
+        }
+    }
+    
+    @IBAction func greenColor(_ sender: UIButton) {
+        if green >= red && green >= blue{
+            increaseCount()
+            self.color.backgroundColor = mixColor()
+        }
+        else{
+            hidden(false)
+        }
+    }
+    
+    @IBAction func blueColor(_ sender: UIButton) {
+        if blue >= green && blue >= red{
+            increaseCount()
+            self.color.backgroundColor = mixColor()
+        }
+        else{
+            hidden(false)
+        }
+    }
+    
+    func hidden(_ a:Bool){
+        if a == true{
+            lose.isHidden = true
+            reset.isHidden = true
+        }
+        else{
+            lose.isHidden = false
+            reset.isHidden = false
+            r.isEnabled = false
+            g.isEnabled = false
+            b.isEnabled = false
+        }
+    }
+    
+    @IBAction func newGame(_ sender: UIButton) {
+        hidden(true)
+        self.color.backgroundColor = mixColor()
+        r.isEnabled = true
+        g.isEnabled = true
+        b.isEnabled = true
+    }
     
     override func viewDidLoad() {
+        self.score.text = "Current Score: \(counter.count)"
+        self.highestScore.text = "Highest Score: \(biggestScore.increaseScore())"
         super.viewDidLoad()
-        self.colorView.backgroundColor = gameModel.getNewColor()
+        self.color.backgroundColor = mixColor()
+        // Do any additional setup after loading the view.
     }
-    
-    var gameModel: ColorGuessingModel = ColorGuessingModel()
-    
-    @IBAction func guessColor(_ sender: UIButton) {
-        var guess: UIColor
-        switch sender.tag {
-        case 0:
-            guess = .red
-        case 1:
-            guess = .green
-        case 2:
-            guess = .blue
-        default:
-            guess = .white
-            fatalError("Invalid Tag")
-        }
-        if gameModel.isDominant(guess: guess) {
-            currentScoreLabel.text = String(gameModel.currentScore)
-            self.colorView.backgroundColor = gameModel.getNewColor()
-        } else {
-            gameOverLabel.isHidden = false
-            newGameLabel.isHidden = false
-            [redButton, greenButton, blueButton].forEach{$0?.isEnabled = false}
-        }
-    }
-    @IBAction func newGameButtonPressed(_ sender: UIButton) {
-        highScoreLabel.text = String(max(Int(highScoreLabel.text!)!, Int(currentScoreLabel.text!)!))
-        currentScoreLabel.text = "0"
-        gameModel = ColorGuessingModel()
-        gameOverLabel.isHidden = true
-        newGameLabel.isHidden = true
-        [redButton, greenButton, blueButton].forEach{$0?.isEnabled = true}
-        self.colorView.backgroundColor = gameModel.getNewColor()
-    }
+
+
 }
 
