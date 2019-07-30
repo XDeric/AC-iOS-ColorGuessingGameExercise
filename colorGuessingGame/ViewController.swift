@@ -46,7 +46,7 @@ class ViewController: UIViewController {
         }
         else{
             hidden(false)
-            counter.count = 0
+
         }
         updateScore()
     }
@@ -58,7 +58,7 @@ class ViewController: UIViewController {
         }
         else{
             hidden(false)
-            counter.count = 0
+            
         }
         updateScore()
     }
@@ -70,7 +70,7 @@ class ViewController: UIViewController {
         }
         else{
             hidden(false)
-            counter.count = 0
+            
         }
         updateScore()
     }
@@ -115,6 +115,7 @@ class ViewController: UIViewController {
             r.isEnabled = false
             g.isEnabled = false
             b.isEnabled = false
+            counter.count = 0
         }
     }
 
