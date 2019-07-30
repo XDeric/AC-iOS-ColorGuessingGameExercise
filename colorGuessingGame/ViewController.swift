@@ -22,25 +22,23 @@ class ViewController: UIViewController {
     @IBOutlet weak var lose: UILabel!
     @IBOutlet weak var new: UIButton!
     
-    var red = 0
-    var green = 0
-    var blue = 0
-    var alpha = 0
+    var red: CGFloat = 0.0
+    var green: CGFloat = 0.0
+    var blue: CGFloat = 0.0
+    var alpha: CGFloat = 0.0
     
     func mixColor()-> UIColor{
-        let red = CGFloat.random(in: 0...1)
-        let green = CGFloat.random(in: 0...1)
-        let blue = CGFloat.random(in: 0...1)
-        let alpha = CGFloat.random(in: 0...1)
+         red = CGFloat.random(in: 0...1)
+         green = CGFloat.random(in: 0...1)
+         blue = CGFloat.random(in: 0...1)
+         alpha = CGFloat.random(in: 0...1)
         let myColor = UIColor(red: red, green: green, blue: blue, alpha: alpha)
         
         return myColor
     }
     
-    //var counter = Counter()
-    func increaseCount(){
-        counter.increseCount()
-    }
+    var counter = Counter()
+    
     @IBAction func redColor(_ sender: UIButton) {
         if red >= green && red >= blue{
             increaseCount()
@@ -48,7 +46,9 @@ class ViewController: UIViewController {
         }
         else{
             hidden(false)
+            counter.count = 0
         }
+        updateScore()
     }
     
     @IBAction func greenColor(_ sender: UIButton) {
@@ -58,7 +58,9 @@ class ViewController: UIViewController {
         }
         else{
             hidden(false)
+            counter.count = 0
         }
+        updateScore()
     }
     
     @IBAction func blueColor(_ sender: UIButton) {
@@ -68,10 +70,41 @@ class ViewController: UIViewController {
         }
         else{
             hidden(false)
+            counter.count = 0
         }
+        updateScore()
     }
     
-    func hidden(_ a:Bool){
+    @IBAction func newGame(_ sender: UIButton) {
+        hidden(true)
+        increaseHighScore()
+        self.color.backgroundColor = mixColor()
+        r.isEnabled = true
+        g.isEnabled = true
+        b.isEnabled = true
+    }
+    
+    override func viewDidLoad() {
+        self.score.text = "Current Score: \(counter.count)"
+        self.highestScore.text = "Highest Score: \(counter.increaseScore())"
+        super.viewDidLoad()
+        self.color.backgroundColor = mixColor()
+        // Do any additional setup after loading the view.
+    }
+    
+    private func updateScore(){
+        self.score.text = "Current Score: \(counter.count)"
+        self.highestScore.text = "Highest Score: \(counter.increaseScore())"
+    }
+    private func increaseHighScore(){
+        counter.highScore.insert(counter.count)
+        //counter.increaseScore()
+    }
+    private func increaseCount(){
+        counter.increseCount()
+    }
+    
+    private func hidden(_ a:Bool){
         if a == true{
             lose.isHidden = true
             reset.isHidden = true
@@ -84,23 +117,6 @@ class ViewController: UIViewController {
             b.isEnabled = false
         }
     }
-    
-    @IBAction func newGame(_ sender: UIButton) {
-        hidden(true)
-        self.color.backgroundColor = mixColor()
-        r.isEnabled = true
-        g.isEnabled = true
-        b.isEnabled = true
-    }
-    
-    override func viewDidLoad() {
-        self.score.text = "Current Score: \(counter.count)"
-        self.highestScore.text = "Highest Score: \(biggestScore.increaseScore())"
-        super.viewDidLoad()
-        self.color.backgroundColor = mixColor()
-        // Do any additional setup after loading the view.
-    }
-
 
 }
 
